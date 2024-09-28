@@ -14,7 +14,11 @@ class SearchController extends Controller
 
     public function consult(Request $request)
     {
-        
+        if($request->s == null) {
+            return response([
+                'pdfs' => []
+            ], 200);
+        }
         return response($this->searchActionMain->execute($request), 200);
     }
 }
