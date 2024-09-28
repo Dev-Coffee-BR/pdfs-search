@@ -31,8 +31,6 @@ class SearchActionMain
             ]);
         }
 
-        
-
         return [
             'pdfs' => $pdfs,
             'message' => "Success",
