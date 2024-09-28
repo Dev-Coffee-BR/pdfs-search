@@ -27,7 +27,7 @@ class SearchActionMain
             $this->requestLogRepository->create([
                 'search' => $request->s,
                 'engine' => 'bing',
-                'ip' => $request->ip()
+                'ip' => $_REQUEST['REMOTE_ADDR']
             ]);
         }
 
