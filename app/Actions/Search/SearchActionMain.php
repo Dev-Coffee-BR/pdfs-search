@@ -23,11 +23,15 @@ class SearchActionMain
     {
         $pdfs = $this->bingSearch->execute($request);
 
-        $this->requestLogRepository->create([
-            'search' => $request->s,
-            'engine' => 'bing',
-            'ip' => $request->ip()
-        ]);
+        if($request->s != null){
+            $this->requestLogRepository->create([
+                'search' => $request->s,
+                'engine' => 'bing',
+                'ip' => $request->ip()
+            ]);
+        }
+
+        
 
         return [
             'pdfs' => $pdfs,
