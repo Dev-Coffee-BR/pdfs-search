@@ -29,4 +29,5 @@ jobs:
           password: ${{ secrets.SSH_PASS }}
           script: |
             cd /home/projetos/pdf-search
+            &&
             docker-compose up -d
