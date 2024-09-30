@@ -33,7 +33,6 @@ class SearchActionMain
             }
         } catch (\Exception $e) {
         }
-
         return [
             'pdfs' => $pdfs,
             'message' => "Success",

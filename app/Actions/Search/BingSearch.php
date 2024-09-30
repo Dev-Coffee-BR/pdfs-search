@@ -22,8 +22,8 @@ class BingSearch
      */
     public function execute(Request $request): Collection
     {
-        $search = str_replace(" ", "+", $request->input('s'));
-        $url = "https://www.bing.com/search?q=$search+filetype%3Apdf";
+        $search = str_replace(" ", "%20", $request->input('s'));
+        $url = "https://www.bing.com/search?q=$search%20filetype%3Apdf";
         $web = new \Spekulatius\PHPScraper\PHPScraper;
         $web->go($url);
        
