@@ -22,13 +22,13 @@ class BingSearch
      */
     public function execute(Request $request): Collection
     {
+        $search = str_replace(" ", "+", $request->input('s'));
+        $url = "https://www.bing.com/search?q=$search+filetype%3Apdf";
+        $web = new \Spekulatius\PHPScraper\PHPScraper;
+        $web->go($url);
+       
+        $pdfs = collect();
         try {
-            $search = str_replace(" ", "+", $request->input('s'));
-            $url = "https://www.bing.com/search?q=$search+filetype%3Apdf";
-            $web = new \Spekulatius\PHPScraper\PHPScraper;
-            $web->go($url);
-           
-            $pdfs = collect();
             $web->filter("//li[@class='b_algo']")->each(function($node) use (&$pdfs) {
                 if(str_contains($node->filter("h2")->filter('a')->attr("href"), ".pdf")) {
                     $dto = new PdfDto([
