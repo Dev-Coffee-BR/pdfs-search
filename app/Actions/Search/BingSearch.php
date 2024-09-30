@@ -28,21 +28,16 @@ class BingSearch
         $web->go($url);
        
         $pdfs = collect();
-        try {
-            $web->filter("//li[@class='b_algo']")->each(function($node) use (&$pdfs) {
-                if(str_contains($node->filter("h2")->filter('a')->attr("href"), ".pdf")) {
-                    $dto = new PdfDto([
-                        'link' => $node->filter("h2")->filter('a')->attr("href"),
-                        'title' => $node->filter("h2")->filter('a')->text(),
-                        'description' => substr($node->filter("div")->filter("p")->text(), 3)
-                    ]);
-                    $pdfs->add($dto);
-                }
-            });
-        } catch (\Exception $e) {
-            $pdfs = collect();
-        }
-
+        $web->filter("//li[@class='b_algo']")->each(function($node) use (&$pdfs) {
+            if(str_contains($node->filter("h2")->filter('a')->attr("href"), ".pdf")) {
+                $dto = new PdfDto([
+                    'link' => $node->filter("h2")->filter('a')->attr("href"),
+                    'title' => $node->filter("h2")->filter('a')->text(),
+                    'description' => substr($node->filter("div")->filter("p")->text(), 3)
+                ]);
+                $pdfs->add($dto);
+            }
+        });
         return $pdfs;
     }
 }
