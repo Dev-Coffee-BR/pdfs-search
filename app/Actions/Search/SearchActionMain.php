@@ -15,13 +15,12 @@ class SearchActionMain
      */
     public function __construct(
         protected BingSearch $bingSearch,
-        protected GoogleSearch $googleSearch,
         protected RequestLogRepository $requestLogRepository
     ){}
 
     public function execute(Request $request)
     {
-        $pdfs = $this->googleSearch->execute($request);
+        $pdfs = $this->bingSearch->execute($request);
 
         try {
             if($request->s != null){
