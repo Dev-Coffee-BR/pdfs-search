@@ -20,24 +20,26 @@ class BingSearch
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Support\Collection<PdfDto>
      */
-    public function execute(Request $request): Collection
+    public function execute(Request $request)
     {
-        $search = str_replace(" ", "%20", $request->input('s'));
-        $url = "https://www.bing.com/search?q=$search%20filetype%3Apdf";
+        $search = $request->input('s');
+        $url = "https://www.bing.com/search?q=$search+inurl%3A.pdf+filetype%3Apdf";
+        // echo $url;
         $web = new \Spekulatius\PHPScraper\PHPScraper;
         $web->go($url);
        
+        /**
+         * @var Collection<PdfDto>
+         */
         $pdfs = collect();
-        $web->filter("//li[@class='b_algo']")->each(function($node) use (&$pdfs) {
-            if(str_contains($node->filter("h2")->filter('a')->attr("href"), ".pdf")) {
-                $dto = new PdfDto([
-                    'link' => $node->filter("h2")->filter('a')->attr("href"),
-                    'title' => $node->filter("h2")->filter('a')->text(),
-                    'description' => substr($node->filter("div")->filter("p")->text(), 3)
-                ]);
-                $pdfs->add($dto);
-            }
+        $pdfs = $web->filter("//li[@class='b_algo']")->each(function($node) {
+            $dto = new PdfDto([
+                'link' => explode(".pdf",  $node->filter("h2")->filter('a')->attr("href"))[0].".pdf",
+                'title' => $node->filter("h2")->filter('a')->text(),
+                'description' => substr($node->filter("div")->filter("p")->text(), 3)
+            ]);
+            return $dto;
         });
-        return $pdfs;
+        return collect($pdfs);   
     }
 }
