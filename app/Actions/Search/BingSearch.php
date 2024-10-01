@@ -23,7 +23,7 @@ class BingSearch
     public function execute(Request $request)
     {
         $search = $request->input('s');
-        $url = "https://www.bing.com/search?q=$search+inurl%3A.pdf+filetype%3Apdf";
+        $url = "https://www.bing.com/search?q=$search+filetype%3Apdf";
         $web = new \Spekulatius\PHPScraper\PHPScraper;
         $web->go($url);
        

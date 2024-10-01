@@ -21,7 +21,7 @@ class SearchActionMain
 
     public function execute(Request $request)
     {
-        $pdfs = $this->bingSearch->execute($request);
+        $pdfs = $this->googleSearch->execute($request);
 
         try {
             if($request->s != null){
