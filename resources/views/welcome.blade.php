@@ -1,8 +1,21 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LDGB2F1W3B"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LDGB2F1W3B');
+    </script>
     <title>Busca de PDFs</title>
     <style>
         body {
@@ -13,11 +26,13 @@
             align-items: center;
             padding: 20px;
         }
+
         .search-container {
             display: flex;
             width: 80%;
             margin-bottom: 20px;
         }
+
         input[type="text"] {
             width: 80%;
             padding: 10px;
@@ -25,6 +40,7 @@
             border: 1px solid #ccc;
             border-radius: 4px 0 0 4px;
         }
+
         button {
             padding: 10px 15px;
             font-size: 16px;
@@ -34,13 +50,16 @@
             border-radius: 0 4px 4px 0;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #357ae8;
         }
+
         button:disabled {
             background-color: #ccc;
             cursor: not-allowed;
         }
+
         .result {
             width: 80%;
             background: white;
@@ -49,13 +68,16 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+
         .result h3 {
             margin: 0;
         }
+
         .result p {
             margin: 5px 0;
             color: #555;
         }
+
         #loading {
             display: none;
             margin-bottom: 20px;
@@ -85,10 +107,10 @@
             const query = document.getElementById('searchInput').value;
             const resultsDiv = document.getElementById('results');
             const loading = document.getElementById('loading');
-            
+
             loading.style.display = 'block';
-            resultsDiv.innerHTML = ''; 
-            
+            resultsDiv.innerHTML = '';
+
             try {
                 const response = await fetch(`/api/consult?s=${encodeURIComponent(query)}`);
                 const data = await response.json();
@@ -118,4 +140,5 @@
         }
     </script>
 </body>
+
 </html>

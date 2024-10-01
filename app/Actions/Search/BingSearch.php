@@ -24,7 +24,6 @@ class BingSearch
     {
         $search = $request->input('s');
         $url = "https://www.bing.com/search?q=$search+inurl%3A.pdf+filetype%3Apdf";
-        // echo $url;
         $web = new \Spekulatius\PHPScraper\PHPScraper;
         $web->go($url);
        
@@ -32,6 +31,7 @@ class BingSearch
          * @var Collection<PdfDto>
          */
         $pdfs = collect();
+        
         $pdfs = $web->filter("//li[@class='b_algo']")->each(function($node) {
             $dto = new PdfDto([
                 'link' => explode(".pdf",  $node->filter("h2")->filter('a')->attr("href"))[0].".pdf",
@@ -40,6 +40,7 @@ class BingSearch
             ]);
             return $dto;
         });
+
         return collect($pdfs);   
     }
 }
