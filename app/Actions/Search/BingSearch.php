@@ -30,8 +30,11 @@ class BingSearch
             $search = urlencode(trim($request->input('s')) . " filetype:pdf (site:amazonaws.com OR site:archive.org) -related:baidu.com");
             $url = "https://www.bing.com/search?q=" . $search . "&count=50&first=$first&setlang=pt-BR&cc=BR";
             $web = new \Spekulatius\PHPScraper\PHPScraper;
+            $web->setHeaders([
+                'Accept-Language' => 'pt-BR',
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+            ]);
             $web->go($url);
-            
             $list = ($web->filter("//li[@class='b_algo']")->each(function ($node) {
                 $dto = new PdfDto([
                     'link' => explode(".pdf",  $node->filter("h2")->filter('a')->attr("href"))[0] . ".pdf",
