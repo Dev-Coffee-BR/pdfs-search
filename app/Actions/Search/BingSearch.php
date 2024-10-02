@@ -11,9 +11,7 @@ class BingSearch
     /**
      * Create a new class instance.
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * 
@@ -22,25 +20,30 @@ class BingSearch
      */
     public function execute(Request $request)
     {
-        $search = $request->input('s');
-        $url = "https://www.bing.com/search?q=$search+filetype%3Apdf+inurl%3A.pdf";
-        $web = new \Spekulatius\PHPScraper\PHPScraper;
-        $web->go($url);
-       
         /**
          * @var Collection<PdfDto>
          */
         $pdfs = collect();
-        
-        $pdfs = $web->filter("//li[@class='b_algo']")->each(function($node) {
-            $dto = new PdfDto([
-                'link' => explode(".pdf",  $node->filter("h2")->filter('a')->attr("href"))[0].".pdf",
-                'title' => $node->filter("h2")->filter('a')->text(),
-                'description' => substr($node->filter("div")->filter("p")->text(), 3)
-            ]);
-            return $dto;
-        });
+        $paginations = [1, 50, 100];
 
-        return collect($pdfs);   
+        foreach ($paginations as $first) {
+            $search = urlencode(trim($request->input('s')) . " filetype:pdf (site:amazonaws.com OR site:archive.org)");
+            $url = "https://www.bing.com/search?q=" . $search . "&count=50&first=$first";
+            $web = new \Spekulatius\PHPScraper\PHPScraper;
+            $web->go($url);
+            
+            $list = ($web->filter("//li[@class='b_algo']")->each(function ($node) {
+                $dto = new PdfDto([
+                    'link' => explode(".pdf",  $node->filter("h2")->filter('a')->attr("href"))[0] . ".pdf",
+                    'title' => $node->filter("h2")->filter('a')->text(),
+                    'description' => substr($node->filter("div")->filter("p")->text(), 3)
+                ]);
+                return $dto;
+            }));
+
+            $pdfs->push(...$list);
+        }
+
+        return collect($pdfs);
     }
 }
