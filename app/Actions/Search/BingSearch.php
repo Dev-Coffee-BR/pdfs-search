@@ -28,7 +28,7 @@ class BingSearch
 
         foreach ($paginations as $first) {
             $search = urlencode(trim($request->input('s')) . " filetype:pdf (site:amazonaws.com OR site:archive.org)");
-            $url = "https://www.bing.com/search?q=" . $search . "&count=50&first=$first";
+            $url = "https://www.bing.com/search?q=" . $search . "&count=50&first=$first&setlang=pt-BR";
             $web = new \Spekulatius\PHPScraper\PHPScraper;
             $web->go($url);
             
