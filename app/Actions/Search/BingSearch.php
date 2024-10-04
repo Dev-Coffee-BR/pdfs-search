@@ -36,12 +36,14 @@ class BingSearch
             ]);
             $web->go($url);
             $list = ($web->filter("//li[@class='b_algo']")->each(function ($node) {
-                $dto = new PdfDto([
-                    'link' => explode(".pdf",  $node->filter("h2")->filter('a')->attr("href"))[0] . ".pdf",
-                    'title' => $node->filter("h2")->filter('a')->text(),
-                    'description' => substr($node->filter("div")->filter("p")->text(), 3)
-                ]);
-                return $dto;
+                if (strpos($node->filter("h2")->filter('a')->attr("href"), ".pdf") === false) {
+                    $dto = new PdfDto([
+                        'link' => $node->filter("h2")->filter('a')->attr("href"),
+                        'title' => $node->filter("h2")->filter('a')->text(),
+                        'description' => substr($node->filter("div")->filter("p")->text(), 3)
+                    ]);
+                    return $dto;
+                }
             }));
 
             $pdfs->push(...$list);
